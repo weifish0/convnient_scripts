@@ -1,65 +1,45 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-16 relative">
+      {/* Decorative Orbs */}
+      <div className="absolute top-1/4 -left-10 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-pulse pointer-events-none" />
+      <div className="absolute top-1/3 -right-10 w-72 h-72 bg-fuchsia-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-pulse pointer-events-none" style={{ animationDelay: "2s" }} />
+
+      <div className="space-y-6 text-center z-10">
+        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500 drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
+          Convenient Scripts
+        </h1>
+        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
+          日常工作的好幫手。<br/>在這裡找到各種可以幫您節省時間的小工具！
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl z-10">
+        <Link href="/md2pdf" className="block h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded-3xl">
+          <div className="h-full flex flex-col p-8 rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] group-hover:bg-white/[0.06] group-hover:border-white/[0.15] group-hover:shadow-[0_8px_32px_0_rgba(79,70,229,0.15)] group-hover:-translate-y-1 transition-all duration-700 ease-out-expo">
+            <h2 className="text-2xl font-bold text-slate-100 group-hover:text-indigo-300 transition-colors mb-4 flex items-center gap-3">
+              <span className="text-2xl opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-transform origin-bottom">📄</span> Markdown 轉 PDF
+            </h2>
+            <p className="text-slate-400 leading-relaxed font-light mb-8 flex-grow">
+              上傳您的 .md 檔案或是使用所見即所得的畫布，一鍵轉換成排版乾淨、完美支援繁體中文的 PDF 格式。
+            </p>
+            <div className="w-full py-3 text-center rounded-xl bg-white/5 border border-white/10 text-slate-300 font-medium group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-all duration-500 shadow-inner">
+              開始轉換 →
+            </div>
+          </div>
+        </Link>
+        
+        {/* 未來的工具卡片 */}
+        <div className="h-full min-h-[300px] flex flex-col items-center justify-center p-8 rounded-3xl bg-white/[0.01] border border-dashed border-white/10 backdrop-blur-xl opacity-60 cursor-not-allowed select-none hidden md:flex">
+          <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/5">
+            <span className="text-slate-500 text-lg">✨</span>
+          </div>
+          <p className="text-slate-500 font-medium tracking-widest text-xs uppercase mb-2">Coming Soon</p>
+          <p className="text-slate-600 font-light text-center text-sm">更多實用工具即將推出...</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
