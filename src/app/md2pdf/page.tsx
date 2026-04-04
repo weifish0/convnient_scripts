@@ -21,6 +21,7 @@ export default function MarkdownToPdfPage() {
   const [marginBottom, setMarginBottom] = useState<number>(15);
   const [showPageNumbers, setShowPageNumbers] = useState<boolean>(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [fileName, setFileName] = useState<string>("document");
   
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -70,6 +71,9 @@ export default function MarkdownToPdfPage() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    // 儲存無副檔名部分的檔案名稱，用於預設 PDF 檔名
+    setFileName(file.name.replace(/\.[^/.]+$/, ""));
     
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -138,7 +142,7 @@ export default function MarkdownToPdfPage() {
         <!DOCTYPE html>
         <html lang="zh-TW">
         <head>
-          <title>&#8203;</title>
+          <title>${fileName}</title>
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
             body {
@@ -190,13 +194,25 @@ export default function MarkdownToPdfPage() {
       `);
       doc.close();
 
+      // 先把母視窗 URL 與標題暫時偽裝，使儲存檔名根據上傳檔名，且下方不會印出完整路徑
+      const originalPath = window.location.pathname;
+      const originalTitle = document.title;
+      window.history.replaceState(null, '', '/\u200B');
+      document.title = fileName;
+
       setTimeout(() => {
         try {
-          // 嘗試清除 iframe 的 URL 記錄，使下方不再印出完整路徑
-          iframeRef.current?.contentWindow?.history.replaceState(null, '', '\u200B');
+          iframeRef.current?.contentWindow?.history.replaceState(null, '', '/\u200B');
         } catch (_e) {}
-        iframeRef.current?.contentWindow?.focus();
-        iframeRef.current?.contentWindow?.print();
+        
+        try {
+          iframeRef.current?.contentWindow?.focus();
+          iframeRef.current?.contentWindow?.print();
+        } finally {
+          // 無論列印完成或取消，都立刻恢復原本的 url 路徑與標題
+          window.history.replaceState(null, '', originalPath);
+          document.title = originalTitle;
+        }
       }, 500);
 
     } catch (error) {
