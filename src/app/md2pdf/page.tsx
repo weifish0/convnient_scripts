@@ -144,30 +144,47 @@ export default function MarkdownToPdfPage() {
             body {
               font-family: 'Noto Sans TC', system-ui, -apple-system, sans-serif;
               line-height: 1.6;
-              padding: 40px;
+              padding: 0;
+              margin: 0;
               color: #333;
             }
+            .markdown-body { padding: 40px; }
             h1, h2, h3 { color: #111; border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
-            pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; }
+            pre { background: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
             code { background: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; }
             blockquote { border-left: 4px solid #dfe2e5; padding: 0 1em; color: #6a737d; margin-left: 0; }
-            table { border-collapse: collapse; width: 100%; margin: 16px 0; }
-            th, td { border: 1px solid #dfe2e5; padding: 6px 13px; }
-            th { font-weight: 600; background: #f6f8fa; }
+            table.md-table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+            table.md-table th, table.md-table td { border: 1px solid #dfe2e5; padding: 6px 13px; }
+            table.md-table th { font-weight: 600; background: #f6f8fa; }
             img { max-width: 100%; height: auto; }
             @media print {
+              .markdown-body { padding: 0 15mm; }
               @page { 
                 margin-top: 0; /* 隱藏最上方的時間與標題 */
-                margin-bottom: ${showPageNumbers ? `${marginBottom}mm` : '0'}; /* 決定是否保留底部空間顯示瀏覽器頁數/網址 */
-              }
-              body { 
-                padding: ${marginTop}mm 0 ${!showPageNumbers ? `${marginBottom}mm` : '0'} 0; /* 補回版面間距，取代原本 @page 被清空的 margin */
+                margin-bottom: ${showPageNumbers ? `${marginBottom}mm` : '0'}; /* 決定是否保留底部空間顯示瀏覽器頁數 */
+                margin-left: 0;
+                margin-right: 0;
               }
             }
           </style>
         </head>
         <body>
-          ${cleanHtml}
+          <table style="width: 100%; border: none; border-collapse: collapse;">
+            <thead style="display: table-header-group; border: none;">
+              <tr><th style="height: ${marginTop}mm; padding: 0; border: none;"></th></tr>
+            </thead>
+            <tbody style="border: none;">
+              <tr><td style="padding: 0; border: none;">
+                <div class="markdown-body">
+                  ${cleanHtml.replace(/<table/g, '<table class="md-table"')}
+                </div>
+              </td></tr>
+            </tbody>
+            ${!showPageNumbers ? `
+            <tfoot style="display: table-footer-group; border: none;">
+              <tr><td style="height: ${marginBottom}mm; padding: 0; border: none;"></td></tr>
+            </tfoot>` : ''}
+          </table>
         </body>
         </html>
       `);
