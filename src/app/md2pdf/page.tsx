@@ -3,9 +3,31 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import { marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
+import markedKatex from "marked-katex-extension";
+import "highlight.js/styles/github.css";
+import "katex/dist/katex.min.css";
 import DOMPurify from "dompurify";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+
+marked.use(
+  markedHighlight({
+    emptyLangClass: 'hljs',
+    langPrefix: 'hljs language-',
+    highlight(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+      return hljs.highlight(code, { language }).value;
+    }
+  })
+);
+
+marked.use(
+  markedKatex({
+    throwOnError: false
+  })
+);
 
 interface UploadedImage {
   id: string;
@@ -14,7 +36,7 @@ interface UploadedImage {
 }
 
 export default function MarkdownToPdfPage() {
-  const [markdown, setMarkdown] = useState<string>("# 歡迎使用\n從這裡開始輸入您的 Markdown...\n- 支援繁體中文\n- [x] 快速轉換\n- 簡單易用\n\n您也可以直接上傳 `.md` 檔案來轉換。");
+  const [markdown, setMarkdown] = useState<string>("# 歡迎使用\n從這裡開始輸入您的 Markdown...\n- 支援繁體中文與基礎排版\n- 支援程式碼高亮 (如 Python, C++, Assembly 等)\n- 支援 LaTeX 數學公式 \n\n```python\ndef hello_world():\n    print(\"Hello PDF!\")\n```\n\n```assembly\nmov eax, 1\nadd ebx, eax\n```\n\n數學公式範例：\n$$ E = mc^2 $$\n\n您也可以直接上傳 `.md` 檔案來轉換。");
   const [previewHtml, setPreviewHtml] = useState<string>("");
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [marginTop, setMarginTop] = useState<number>(15);
@@ -59,10 +81,22 @@ export default function MarkdownToPdfPage() {
     });
   };
 
+  const dompurifyConfig = {
+    ADD_ATTR: ['target', 'class', 'className', 'style'],
+    ADD_TAGS: [
+      'math', 'mi', 'mn', 'mo', 'ms', 'mspace', 'mtext', 'menclose', 'merror', 'mfrac', 
+      'mpadded', 'mphantom', 'mroot', 'mrow', 'msqrt', 'mstyle', 'mmultiscripts', 'mover', 
+      'mprescripts', 'msub', 'msubsup', 'msup', 'munder', 'munderover', 'none', 'maligngroup', 
+      'malignmark', 'mtable', 'mtd', 'mtr', 'mlongdiv', 'mscarries', 'mscarry', 'msgroup', 
+      'msline', 'msrow', 'semantics', 'annotation', 'annotation-xml'
+    ],
+    FORBID_TAGS: ['script']
+  };
+
   useEffect(() => {
     const parseAndSanitize = async () => {
       const parsed = await marked.parse(getProcessedMarkdown());
-      setPreviewHtml(DOMPurify.sanitize(parsed, { ADD_ATTR: ['target'] }));
+      setPreviewHtml(DOMPurify.sanitize(parsed, dompurifyConfig));
     };
     parseAndSanitize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,7 +167,7 @@ export default function MarkdownToPdfPage() {
       if (!iframeRef.current || !iframeRef.current.contentWindow) return;
       
       const parsedMarkdown = await marked.parse(getProcessedMarkdown());
-      const cleanHtml = DOMPurify.sanitize(parsedMarkdown, { ADD_ATTR: ['target'] });
+      const cleanHtml = DOMPurify.sanitize(parsedMarkdown, dompurifyConfig);
       
       const doc = iframeRef.current.contentDocument || iframeRef.current.contentWindow.document;
       
@@ -143,6 +177,8 @@ export default function MarkdownToPdfPage() {
         <html lang="zh-TW">
         <head>
           <title>${fileName}</title>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.45/katex.min.css">
           <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
             body {
