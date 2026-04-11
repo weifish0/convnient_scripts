@@ -239,6 +239,7 @@ export default function MarkdownToPdfPage() {
       setTimeout(() => {
         try {
           iframeRef.current?.contentWindow?.history.replaceState(null, '', '/\u200B');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (_e) {}
         
         try {
