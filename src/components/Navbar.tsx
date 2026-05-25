@@ -13,6 +13,9 @@ export function Navbar() {
             <Link href="/md2pdf" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors drop-shadow-none dark:drop-shadow-sm font-medium tracking-wide">
               Markdown to PDF
             </Link>
+            <Link href="/qrcode" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors drop-shadow-none dark:drop-shadow-sm font-medium tracking-wide">
+              QR Code
+            </Link>
           </div>
         </div>
         <div className="flex items-center gap-4">

@@ -30,6 +30,20 @@ export default function Home() {
             </div>
           </div>
         </Link>
+
+        <Link href="/qrcode" className="block h-full group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-3xl">
+          <div className="h-full flex flex-col p-8 rounded-3xl bg-slate-50/80 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.08] backdrop-blur-2xl shadow-xl dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] group-hover:bg-white dark:group-hover:bg-white/[0.06] group-hover:border-emerald-200 dark:group-hover:border-white/[0.15] group-hover:shadow-2xl dark:group-hover:shadow-[0_8px_32px_0_rgba(16,185,129,0.15)] group-hover:-translate-y-1 transition-all duration-700 ease-out-expo">
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors mb-4 flex items-center gap-3">
+              <span className="text-2xl opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-transform origin-bottom">▦</span> 客製化 QR Code
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed font-light mb-8 flex-grow">
+              建立網址、文字、Email、電話或 Wi-Fi QR Code，調整顏色、背景、點陣樣式與中央 Logo，並下載 PNG 或 SVG。
+            </p>
+            <div className="w-full py-3 text-center rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 font-medium group-hover:bg-emerald-600 group-hover:text-white dark:group-hover:border-emerald-500 transition-all duration-500 shadow-inner">
+              開始製作 →
+            </div>
+          </div>
+        </Link>
         
         {/* 未來的工具卡片 */}
         <div className="h-full min-h-[300px] flex flex-col items-center justify-center p-8 rounded-3xl bg-slate-50/50 dark:bg-white/[0.01] border border-dashed border-slate-300 dark:border-white/10 backdrop-blur-xl opacity-80 dark:opacity-60 cursor-not-allowed select-none hidden md:flex">
